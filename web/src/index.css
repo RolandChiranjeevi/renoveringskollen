@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-canvas: #f6f4f0;
+  --color-surface: #ffffff;
+  --color-line: #e6e1d8;
+  --color-ink: #26231f;
+  --color-muted: #6f685e;
+
+  --color-brand-50: #eef6f2;
+  --color-brand-100: #d6eadf;
+  --color-brand-500: #3d8169;
+  --color-brand-600: #2f6b57;
+  --color-brand-700: #255546;
+
+  --color-danger: #b4382f;
+  --color-warn: #9a5f10;
+}
+
+/*
+ * Mörkt läge: samma tokens med andra värden. data-theme sätts på <html> av /theme-init.js (före första
+ * ritningen) och av lib/theme.ts. "dark:" i klasser följer samma attribut.
+ */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas: #171513;
+  --color-surface: #211e1b;
+  --color-line: #38342e;
+  --color-ink: #ece7de;
+  --color-muted: #a89f92;
+  --color-brand-50: #1b2d25;
+  --color-brand-100: #25402f;
+  --color-brand-500: #4a9a80;
+  --color-brand-600: #2d7560;
+  --color-brand-700: #86d0b4;
+  --color-danger: #f0807a;
+  --color-warn: #e3a64a;
+}
+
+@layer base {
+  /* Fält och listor ska vara lätta att träffa med tummen. */
+  @media (pointer: coarse) {
+    input:not([type='checkbox'], [type='radio'], [type='file'], [type='hidden']),
+    select {
+      min-height: 2.75rem;
+    }
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
+
+/* Streck som krymper under de sekunder man kan ångra en borttagning. */
+@keyframes undo-shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+.undo-bar {
+  animation: undo-shrink linear forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .undo-bar {
+    display: none;
+  }
+}
+
+@media print {
+  @page {
+    margin: 18mm 16mm;
+  }
+  /* Utskrift och PDF är alltid ljusa, även när appen visas i mörkt läge. */
+  html[data-theme='dark'] {
+    color-scheme: light;
+    --color-canvas: #f6f4f0;
+    --color-surface: #ffffff;
+    --color-line: #e6e1d8;
+    --color-ink: #26231f;
+    --color-muted: #6f685e;
+    --color-brand-50: #eef6f2;
+    --color-brand-100: #d6eadf;
+    --color-brand-500: #3d8169;
+    --color-brand-600: #2f6b57;
+    --color-brand-700: #255546;
+    --color-danger: #b4382f;
+    --color-warn: #9a5f10;
+  }
+  body {
+    background: white;
+    font-size: 11pt;
+  }
+}
